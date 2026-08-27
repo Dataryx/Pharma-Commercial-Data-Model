@@ -1,0 +1,4 @@
+user_id,territory_id,overlay_id,access_level,valid_from,valid_to
+rep_demo,TERR0001,PRIMARY,READ,2024-01-01,9999-12-31
+mgr_demo,DIST001,PRIMARY,ROLLUP,2024-01-01,9999-12-31
+nat_demo,NAT01,PRIMARY,READ,2024-01-01,9999-12-31

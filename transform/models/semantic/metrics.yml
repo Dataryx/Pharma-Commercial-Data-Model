@@ -1,0 +1,19 @@
+version: 2
+
+exposures:
+  - name: streamlit_demo_app
+    type: dashboard
+    maturity: medium
+    url: app/Home.py
+    description: Demo app answering the six PCDM analyst questions.
+    depends_on:
+      - ref('mart_brand_performance_weekly')
+      - ref('mart_prescriber_360')
+      - ref('mart_territory_scorecard')
+      - ref('mart_specialty_funnel')
+      - ref('mart_channel_reconciliation')
+      - ref('mart_alignment_restatement_impact')
+      - ref('mart_data_quality_summary')
+    owner:
+      name: commercial-analytics
+      email: analytics@example.com

@@ -1,0 +1,17 @@
+version: 2
+models:
+  - name: sv_rx_demand
+    description: Cleansed rx_demand with current-restatement flag; suppression preserved.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            [prescriber_id, product_id, market_id, geo_id, pay_type, period_end_date, restatement_version]
+      - dbt_utils.expression_is_true:
+          expression: "abs(coalesce(trx_count,0) - (coalesce(nrx_count,0) + coalesce(rrx_count,0))) < 0.001"
+          config:
+            where: "suppression_flag = 'N'"
+    columns:
+      - name: is_current_restatement
+        description: True for latest restatement_version per natural key.
+      - name: trx_count
+        description: Projected TRx; null when suppressed.

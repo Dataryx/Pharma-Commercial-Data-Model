@@ -1,0 +1,7 @@
+metric,value,notes
+brand_trx_total,45573.996799999986,demo seed 42
+avg_trx_share,0.14524212450938878,demo seed 42
+mdm_precision,1.0,demo seed 42
+mdm_recall,1.0,demo seed 42
+funnel_referrals,400.0,demo seed 42
+funnel_first_ship,213.0,demo seed 42

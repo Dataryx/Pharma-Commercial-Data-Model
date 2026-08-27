@@ -1,0 +1,14 @@
+version: 2
+models:
+  - name: mart_brand_performance_weekly
+    description: Brand TRx/NRx/share with R13/MAT (null if incomplete window).
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "trx_share is null or (trx_share >= 0 and trx_share <= 1.000001)"
+    columns:
+      - name: brand_trx
+        description: Brand projected TRx.
+      - name: trx_share
+        description: brand_trx / market_trx at territory × week.
+      - name: brand_trx_r13
+        description: Rolling 13-week TRx; null if window incomplete.

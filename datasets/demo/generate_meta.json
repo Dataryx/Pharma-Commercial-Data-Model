@@ -1,0 +1,6 @@
+{
+  "scale": "demo",
+  "seed": 42,
+  "n_hcp": 2000,
+  "n_months": 3
+}

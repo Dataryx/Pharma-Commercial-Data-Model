@@ -1,0 +1,7 @@
+attribute,strategy,source_priority,tie_breaker
+npi,SOURCE_PRIORITY,hcp_master|crm|specialty|rx_demand,MOST_RECENT
+first_name,SOURCE_PRIORITY,hcp_master|crm|specialty|rx_demand,MOST_RECENT
+last_name,SOURCE_PRIORITY,hcp_master|crm|specialty|rx_demand,MOST_RECENT
+practice_address,MOST_RECENT_NON_NULL,,SOURCE_PRIORITY
+do_not_contact,MOST_RESTRICTIVE,,
+sample_eligible,RULE_LICENSE_DEA_OPTOUT,,

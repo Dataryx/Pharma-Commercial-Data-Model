@@ -1,0 +1,37 @@
+Table dim_hcp {
+  hcp_key varchar [pk]
+  npi varchar
+  first_name varchar
+  last_name varchar
+}
+
+Table dim_product {
+  product_key varchar [pk]
+  is_brand boolean
+}
+
+Table dim_territory {
+  territory_key varchar [pk]
+  parent_territory_id varchar
+}
+
+Table fct_rx_demand {
+  hcp_key varchar [ref: > dim_hcp.hcp_key]
+  product_key varchar [ref: > dim_product.product_key]
+  territory_id varchar [ref: > dim_territory.territory_key]
+  period_end_date date
+  trx_count decimal
+  alignment_version_id varchar
+}
+
+Table fct_shipment {
+  outlet_key varchar
+  product_key varchar [ref: > dim_product.product_key]
+  eaches decimal
+}
+
+Table fct_sp_dispense {
+  patient_token_1 varchar
+  product_id varchar
+  fill_seq_derived int
+}

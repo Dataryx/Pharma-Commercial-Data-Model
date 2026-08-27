@@ -1,0 +1,38 @@
+version: 2
+
+sources:
+  - name: landing
+    schema: landing
+    description: Immutable typed landing tables loaded by pcdm load
+    freshness:
+      warn_after: {count: 8, period: day}
+      error_after: {count: 10, period: day}
+    loaded_at_field: _loaded_at
+    tables:
+      - name: rx_demand
+      - name: edi867_line
+      - name: hcp_master
+      - name: hco_master
+      - name: hcp_hco_affiliation
+      - name: plan_formulary
+      - name: crm_call
+      - name: crm_sample
+      - name: roster
+      - name: alignment_zip
+      - name: alignment_account
+      - name: alignment_prescriber
+      - name: targets
+      - name: sp_referral
+      - name: sp_enrollment
+      - name: sp_benefit_verification
+      - name: sp_prior_auth
+      - name: sp_status_history
+      - name: sp_dispense
+      - name: sp_copay
+      - name: sp_inventory
+      - name: sp_discontinuation
+      - name: product_master
+      - name: dea_hin_xref
+      - name: calendar
+      - name: territories
+      - name: file_manifest

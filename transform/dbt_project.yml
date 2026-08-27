@@ -1,0 +1,67 @@
+name: pcdm
+version: 1.0.0
+config-version: 2
+profile: pcdm
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+docs-paths: ["docs"]
+
+clean-targets:
+  - target
+  - dbt_packages
+  - logs
+
+vars:
+  min_cell_size: 5
+  brand_product_id: PRD001
+  market_id: MKT_RA_BIOLOGIC
+
+models:
+  pcdm:
+    +on_schema_change: append_new_columns
+    bronze:
+      +schema: bronze
+      +materialized: table
+      +meta:
+        layer: bronze
+    silver:
+      +schema: silver
+      +materialized: table
+      +meta:
+        layer: silver
+    mdm:
+      +schema: mdm
+      +materialized: table
+      +meta:
+        layer: mdm
+    gold:
+      +schema: gold
+      +materialized: table
+      +meta:
+        layer: gold
+      dimensions:
+        +materialized: table
+      facts:
+        +materialized: table
+      marts:
+        +materialized: table
+    semantic:
+      +schema: semantic
+      +materialized: view
+    dq:
+      +schema: dq
+      +materialized: table
+
+seeds:
+  pcdm:
+    +schema: bronze
+
+tests:
+  pcdm:
+    +store_failures: true
+    +schema: dq

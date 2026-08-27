@@ -1,0 +1,32 @@
+pcdm:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: "{{ env_var('PCDM_DUCKDB_PATH', '../warehouse/pcdm.duckdb') }}"
+      threads: 4
+      schema: main
+    ci:
+      type: duckdb
+      path: "{{ env_var('PCDM_DUCKDB_PATH', '../warehouse/pcdm_ci.duckdb') }}"
+      threads: 2
+      schema: main
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'unused') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'unused') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', 'unused') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'unused') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'PCDM') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'unused') }}"
+      schema: raw
+      threads: 4
+    postgres:
+      type: postgres
+      host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
+      user: "{{ env_var('POSTGRES_USER', 'pcdm') }}"
+      password: "{{ env_var('POSTGRES_PASSWORD', 'pcdm') }}"
+      port: 5432
+      dbname: "{{ env_var('POSTGRES_DB', 'pcdm') }}"
+      schema: public
+      threads: 2

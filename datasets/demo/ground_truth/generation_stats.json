@@ -1,0 +1,17 @@
+{
+  "scale": "demo",
+  "seed": 42,
+  "defect_stats": {
+    "rx_cells": 26756,
+    "unmatched_prescriber_rate": 0.05953804754073853,
+    "suppressed_cells": 9009,
+    "true_duplicates": 10,
+    "false_friends": 6
+  },
+  "row_counts": {
+    "rx_demand": 53512,
+    "shipments": 249,
+    "sp_dispense": 869,
+    "hcp": 2016
+  }
+}

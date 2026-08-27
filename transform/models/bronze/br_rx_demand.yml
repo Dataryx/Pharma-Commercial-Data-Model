@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: br_rx_demand
+    description: >
+      Bronze 1:1 typed load of Xponent-style projected retail demand (rx_demand).
+      Values are projected decimals. No business logic.
+    config:
+      contract:
+        enforced: false
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - prescriber_id
+            - product_id
+            - market_id
+            - geo_id
+            - pay_type
+            - period_end_date
+            - restatement_version
+    columns:
+      - name: prescriber_id
+        description: Vendor prescriber key (not NPI).
+        tests: [not_null]
+      - name: trx_count
+        description: Projected total prescriptions (decimal).
+      - name: suppression_flag
+        description: Y means metrics are unknown/null, not zero.

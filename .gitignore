@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# dbt
+transform/target/
+transform/dbt_packages/
+transform/logs/
+transform/.user.yml
+
+# Data (keep demo)
+datasets/small/
+datasets/large/
+datasets/*/landing/
+!datasets/demo/
+!datasets/demo/**
+datasets/.cache/
+
+# DuckDB / warehouse
+*.duckdb
+*.duckdb.wal
+.duckdb/
+warehouse/
+
+# Docs build
+site/
+docs/data-dictionary/data-dictionary.md
+docs/data-dictionary/data-dictionary.csv
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Quarantine runtime
+landing/quarantine/
+**/quarantine/
+
+# Dagster
+.tmp_dagster_home_*/

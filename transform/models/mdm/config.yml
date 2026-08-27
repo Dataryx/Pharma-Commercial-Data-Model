@@ -1,0 +1,4 @@
+upper_threshold: 8.0
+lower_threshold: 2.0
+max_cluster_size: 12
+rationale: Tuned for demo synthetic noise; raise lower_threshold to reduce false merges.

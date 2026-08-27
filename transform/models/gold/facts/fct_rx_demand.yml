@@ -1,0 +1,20 @@
+version: 2
+models:
+  - name: fct_rx_demand
+    description: >
+      Projected retail demand fact at HCP × product × market × geo × pay type × period,
+      stamped with as-reported alignment_version_id. Latest restatement only.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "abs(coalesce(trx_count,0) - (coalesce(nrx_count,0) + coalesce(rrx_count,0))) < 0.001"
+          config:
+            where: "suppression_flag = 'N'"
+    columns:
+      - name: hcp_key
+        description: MDM-resolved HCP surrogate (UNMATCHED if unresolved).
+        tests: [not_null]
+      - name: trx_count
+        description: Alignment-weighted projected TRx.
+      - name: alignment_version_id
+        description: Alignment version effective on transaction date (as-reported).
+        tests: [not_null]
