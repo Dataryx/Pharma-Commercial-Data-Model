@@ -1,5 +1,5 @@
--- PCDM warehouse bootstrap (DuckDB / portable DDL)
--- Schemas follow medallion + cross-cutting MDM/DQ layers.
+-- Local DuckDB bootstrap.
+-- Keeps medallion schemas plus MDM / DQ / security side schemas in one place.
 
 CREATE SCHEMA IF NOT EXISTS landing;
 CREATE SCHEMA IF NOT EXISTS bronze;
@@ -10,7 +10,7 @@ CREATE SCHEMA IF NOT EXISTS dq;
 CREATE SCHEMA IF NOT EXISTS semantic;
 CREATE SCHEMA IF NOT EXISTS sec;
 
--- Run history / observability stubs
+-- Lightweight run log so we can see what loaded when
 CREATE TABLE IF NOT EXISTS dq.run_history (
     run_id VARCHAR PRIMARY KEY,
     started_at TIMESTAMP,

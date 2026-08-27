@@ -18,15 +18,15 @@ jobs:
           python -m pip install -e ".[dev]"
       - name: Generate demo
         run: python -m pcdm generate --scale demo --seed 42
-      - name: Pytest (unit)
-        run: python -m pytest tests -q --ignore=tests/test_generator.py -k "not determinism"
-      - name: Generator + EDI + MDM tests
-        run: python -m pytest tests/test_generator.py -q
+      - name: Pytest
+        run: python -m pytest tests -q
       - name: Load + dbt
+        env:
+          PCDM_DUCKDB_PATH: ${{ github.workspace }}/warehouse/pcdm.duckdb
         run: |
           python -m pcdm init-db
           python -m pcdm load --scale demo
-          cd transform
+          cd dbt
           dbt deps --profiles-dir profiles
           dbt build --profiles-dir profiles --target duckdb
       - name: Docs artifacts

@@ -1,13 +1,17 @@
-"""MDM matching: deterministic + probabilistic (lightweight Fellegi–Sunter-style)."""
+"""
+HCP match-merge.
+
+We do a deterministic pass on strong IDs first (valid NPI / ME / DEA), then a
+cheap blocked probabilistic pass. Clusters get size and conflicting-ID guards
+because unconstrained transitive closure will happily merge half a state.
+"""
 
 from __future__ import annotations
 
-from collections import defaultdict
 from dataclasses import dataclass
 
 import jellyfish
 import networkx as nx
-import numpy as np
 import pandas as pd
 import yaml
 

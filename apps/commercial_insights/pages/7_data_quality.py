@@ -1,0 +1,21 @@
+"""DQ scorecard and MDM precision/recall against synthetic ground truth."""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+import streamlit as st
+
+APP_DIR = Path(__file__).resolve().parents[1]
+if str(APP_DIR) not in sys.path:
+    sys.path.insert(0, str(APP_DIR))
+
+from db import connect, t  # noqa: E402
+
+st.header("Data Quality")
+con = connect()
+st.dataframe(con.execute(f"select * from {t('gold', 'mart_data_quality_summary')}").df(), use_container_width=True)
+st.subheader("MDM evaluation")
+st.dataframe(con.execute(f"select * from {t('mdm', 'mdm_match_evaluation')}").df(), use_container_width=True)
+con.close()

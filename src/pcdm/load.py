@@ -1,4 +1,9 @@
-"""Load landing files into DuckDB as external/landing tables for dbt sources."""
+"""
+Ingest landing files into DuckDB.
+
+This is deliberately boring: type what we received, stamp batch metadata, and
+hand MDM off to the Python matcher. Business logic stays in dbt.
+"""
 
 from __future__ import annotations
 
@@ -15,13 +20,13 @@ def _batch_id() -> str:
 
 
 def load_landing(*, scale: str, root: Path, warehouse: Path) -> None:
-    landing = root / "datasets" / scale / "landing"
+    landing = root / "data" / scale / "landing"
     if not landing.exists():
         raise FileNotFoundError(f"Landing path not found: {landing}. Run generate first.")
 
     warehouse.parent.mkdir(parents=True, exist_ok=True)
     con = duckdb.connect(str(warehouse))
-    sql = (root / "scripts" / "database.sql").read_text(encoding="utf-8")
+    sql = (root / "ops" / "scripts" / "database.sql").read_text(encoding="utf-8")
     con.execute(sql)
 
     batch = _batch_id()

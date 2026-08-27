@@ -1,18 +1,24 @@
 # Architecture
 
-## Medallion flow
+## Flow
 
-1. **Generator** (`src/pcdm/generate`) emits immutable landing files.
-2. **Load** (`pcdm load`) registers landing tables in DuckDB and runs Python MDM.
-3. **dbt** builds bronze → silver → gold marts with tests.
-4. **Streamlit** / notebook consume gold.
+1. `pcdm generate` writes immutable landing files under `data/<scale>/landing`
+2. `pcdm load` registers those files in DuckDB and runs HCP MDM in Python
+3. `dbt/` builds bronze → silver → gold marts (plus mdm publish models)
+4. `apps/commercial_insights` and notebooks read from gold
 
-## Cross-cutting
+## Why the folder names
 
-- `mdm/` golden records, xref, match evaluation
-- `dq/` quarantine, test failures, run history
-- `sec/` reserved for RLS (`sec_user_territory_access` documented in BI specs)
+| Folder | Role |
+|---|---|
+| `data/` | What arrived (synthetic stand-ins for vendor drops) |
+| `dbt/` | How we transform it |
+| `src/pcdm/` | Generator, parser, matcher, CLI |
+| `apps/` | Human-facing demos |
+| `ops/` | DDL, orchestration stubs, one-off scripts |
 
 ## Portability
 
-SQL is DuckDB-first; adapter-specific helpers belong in `transform/macros/`. Snowflake and Postgres profiles are committed under `transform/profiles/profiles.yml` for future validation.
+Local/CI runs on DuckDB. Snowflake and Postgres profile stubs sit in
+`dbt/profiles/profiles.yml` for later adapter checks. Anything dialect-specific
+should go behind a macro under `dbt/macros/`.

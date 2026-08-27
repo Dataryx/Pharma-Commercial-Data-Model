@@ -1,28 +1,35 @@
 # Runbook
 
-## Fresh clone
+## Fresh machine
 
-1. `python -m pip install -e ".[dev]"`
-2. `python -m pcdm init-db`
-3. `python -m pcdm generate --scale demo --seed 42`
-4. `python -m pcdm load --scale demo`
-5. `cd transform && dbt deps --profiles-dir profiles && dbt build --profiles-dir profiles --target duckdb`
-6. `python -m streamlit run app/Home.py`
+```bash
+python -m pip install -e ".[dev]"
+python -m pcdm all --scale demo --seed 42
+python -m streamlit run apps/commercial_insights/Home.py
+```
 
-## Backfill
+## Day-to-day
 
-Re-run `pcdm generate` (same seed for identical data) then `pcdm load` and `dbt build`. Late 867 files are represented via `delivery_delay_days` and quarantine folder for failed EDI.
+| Task | Command |
+|---|---|
+| Regen synthetic data | `python -m pcdm generate --scale demo --seed 42` |
+| Reload DuckDB | `python -m pcdm load --scale demo` |
+| Rebuild models/tests | `cd dbt && dbt build --profiles-dir profiles --target duckdb` |
+| Open insights app | `python -m streamlit run apps/commercial_insights/Home.py` |
 
-## Add a source
+Set `PCDM_DUCKDB_PATH` to an absolute path if dbt can't find the warehouse
+(Windows relative paths from `dbt/` are unreliable).
 
-1. Extend generator emitter
-2. Register in `src/pcdm/load.py`
-3. Add `br_*` model + tests
-4. Document under `docs/sources/`
+## Adding a source
 
-## Add a metric
+1. Emit files from `src/pcdm/generate/emitters/`
+2. Register them in `src/pcdm/load.py`
+3. Add a `br_*` model under `dbt/models/bronze/`
+4. Document quirks in `docs/sources/`
 
-1. Define in `docs/metrics/metric-definitions.md`
-2. Add semantic measure/metric or mart column
-3. Add dbt test for the invariant
-4. Update golden fixture `tests/golden/metrics.csv` when stable
+## Adding a metric
+
+1. Write the definition in `docs/metrics/metric-definitions.md`
+2. Put the logic in a gold mart (or a shared macro)
+3. Add a dbt test for the invariant in the same change
+4. Refresh `tests/golden/metrics.csv` after a known-good demo build

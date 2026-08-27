@@ -15,20 +15,19 @@ venv/
 htmlcov/
 
 # dbt
-transform/target/
-transform/dbt_packages/
-transform/logs/
-transform/.user.yml
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+dbt/.user.yml
+dbt/profiles/.user.yml
 
-# Data (keep demo)
-datasets/small/
-datasets/large/
-datasets/*/landing/
-!datasets/demo/
-!datasets/demo/**
-datasets/.cache/
+# Generated scales (keep committed demo when present)
+data/small/
+data/large/
+data/*/landing/quarantine/
+data/.cache/
 
-# DuckDB / warehouse
+# DuckDB
 *.duckdb
 *.duckdb.wal
 .duckdb/
@@ -45,8 +44,7 @@ docs/data-dictionary/data-dictionary.csv
 .DS_Store
 Thumbs.db
 
-# Quarantine runtime
-landing/quarantine/
+# Runtime quarantine
 **/quarantine/
 
 # Dagster

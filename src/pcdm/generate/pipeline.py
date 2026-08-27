@@ -1,13 +1,21 @@
-"""Orchestrates entity + behavior generation and file emission."""
+"""
+Top-level generate orchestrator.
+
+Order matters here: geography and products first, then people/orgs, then the
+behavior sim that actually writes scripts / shipments / specialty events.
+"""
 
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
 
 import numpy as np
 
+from pcdm.generate.behavior.simulate import simulate_world
 from pcdm.generate.config import SCALES, DefectConfig
+from pcdm.generate.emitters.write_all import write_all
 from pcdm.generate.entities.alignment import generate_alignments
 from pcdm.generate.entities.geography import generate_geography
 from pcdm.generate.entities.hco import generate_hcos
@@ -16,8 +24,6 @@ from pcdm.generate.entities.payer import generate_payers
 from pcdm.generate.entities.product import generate_products
 from pcdm.generate.entities.roster import generate_roster
 from pcdm.generate.entities.territory import generate_territories
-from pcdm.generate.behavior.simulate import simulate_world
-from pcdm.generate.emitters.write_all import write_all
 from pcdm.generate.profile import write_data_profile
 
 
@@ -26,14 +32,12 @@ def run_generate(*, scale: str, seed: int, root: Path) -> Path:
     rng = np.random.default_rng(seed)
     defects = DefectConfig()
 
-    out = root / "datasets" / scale
+    out = root / "data" / scale
     landing = out / "landing"
     gt = out / "ground_truth"
     for p in (landing, gt):
+        # Fresh folder each run so checksums stay comparable for a given seed.
         if p.exists():
-            # wipe prior generated landing for reproducibility of directory contents
-            import shutil
-
             shutil.rmtree(p)
         p.mkdir(parents=True, exist_ok=True)
 

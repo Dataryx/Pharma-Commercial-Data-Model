@@ -1,6 +1,6 @@
-# PCDM Documentation
+# PCDM docs
 
-Welcome to the Pharma Commercial Data Model reference implementation docs.
+Local reference for the commercial warehouse:
 
 - [Architecture](architecture.md)
 - [Runbook](runbook.md)

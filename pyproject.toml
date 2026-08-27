@@ -61,7 +61,7 @@ addopts = "-q --tb=short"
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-src = ["src", "tests", "app", "orchestration"]
+src = ["src", "tests", "apps", "ops"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]

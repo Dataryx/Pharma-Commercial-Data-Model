@@ -1,3 +1,3 @@
-"""Pharma Commercial Data Model (PCDM) reference implementation."""
+"""Pharma Commercial Data Model toolkit."""
 
 __version__ = "0.1.0"

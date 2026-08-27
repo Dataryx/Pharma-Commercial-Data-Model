@@ -13,14 +13,14 @@ FORBIDDEN_PII = {"ssn", "mrn", "dob", "date_of_birth", "first_name", "last_name"
 
 def test_patient_marts_have_no_direct_pii_columns():
     """Published patient-grain marts must not expose identifier-like PII column names."""
-    mart = ROOT / "transform" / "models" / "gold" / "marts" / "mart_specialty_funnel.sql"
+    mart = ROOT / "dbt" / "models" / "gold" / "marts" / "mart_specialty_funnel.sql"
     text = mart.read_text(encoding="utf-8").lower()
     for col in ("ssn", "mrn", "dob", "patient_name", "address"):
         assert col not in text
 
 
 def test_ic_eligible_has_no_patient_restricted_ancestor_when_manifest_present():
-    manifest_path = ROOT / "transform" / "target" / "manifest.json"
+    manifest_path = ROOT / "dbt" / "target" / "manifest.json"
     if not manifest_path.exists():
         pytest.skip("manifest not built yet")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

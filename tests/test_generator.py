@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture(scope="module")
 def demo_dataset(tmp_path_factory):
-    # Use repo datasets/demo if generating into project root is preferred for CI speed after first run
+    # Prefer the committed demo tree when present; tests can also generate into tmp roots.
     out = run_generate(scale="demo", seed=42, root=ROOT)
     return out
 
@@ -38,13 +38,13 @@ def test_npi_luhn():
 
 def test_determinism_checksums(tmp_path):
     root = tmp_path
-    # minimal: generate twice into isolated roots by patching datasets path via root
+    # Two fresh roots, same seed — landing checksums must match bit-for-bit.
     a = run_generate(scale="demo", seed=42, root=root / "a")
     b = run_generate(scale="demo", seed=42, root=root / "b")
 
     def checksum_tree(base: Path) -> dict[str, str]:
         out = {}
-        land = base / "datasets" / "demo" / "landing"
+        land = base / "data" / "demo" / "landing"
         for p in sorted(land.rglob("*")):
             if p.is_file() and "quarantine" not in p.parts:
                 rel = str(p.relative_to(land)).replace("\\", "/")

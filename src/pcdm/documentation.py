@@ -1,4 +1,9 @@
-"""Lightweight docs generation from dbt artifacts."""
+"""
+Pull column descriptions out of dbt's manifest and keep the ERD from drifting.
+
+Nothing fancy — if docs generate hasn't been run yet we still write empty stubs
+so the docs site has somewhere to land.
+"""
 
 from __future__ import annotations
 
@@ -8,7 +13,7 @@ from pathlib import Path
 
 
 def generate_data_dictionary(root: Path) -> None:
-    manifest_path = root / "transform" / "target" / "manifest.json"
+    manifest_path = root / "dbt" / "target" / "manifest.json"
     out_dir = root / "docs" / "data-dictionary"
     out_dir.mkdir(parents=True, exist_ok=True)
     md_path = out_dir / "data-dictionary.md"

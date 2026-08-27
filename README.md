@@ -1,51 +1,63 @@
 # Pharma Commercial Data Model (PCDM)
 
-Synthetic, reproducible **pharma commercial data warehouse** reference implementation:
-Xponent-*style* demand (`rx_demand`), EDI 867 sales-out, specialty pharmacy funnel, HCP/HCO MDM,
-territory alignment (as-reported vs current), and tested metric marts.
+Reference implementation of a manufacturer commercial analytics warehouse.
 
-## Quickstart (Windows / any OS)
+It covers the messy parts teams usually discover too late: projected retail
+demand (Xponent-*style*, not proprietary), wholesaler 867 sales-out, specialty
+pharmacy funnel data, HCP/HCO match-merge, territory alignment restatement, and
+metric definitions that are actually tested.
+
+Everything is synthetic. Same seed → same files. No cloud account required.
+
+## Layout
+
+```text
+apps/commercial_insights/   Streamlit demo for analysts
+data/                       Generated landing files (demo scale can be committed)
+dbt/                        Medallion transforms (bronze → silver → mdm → gold)
+docs/                       Architecture, metrics, ERDs, runbooks
+ops/scripts/                Warehouse DDL and small utilities
+ops/orchestration/          Optional Dagster entrypoint
+src/pcdm/                   Generator, EDI parser, MDM, CLI
+tests/                      Pytest + golden metric fixtures
+warehouse/                  Local DuckDB file (gitignored)
+```
+
+## Quick start
 
 ```bash
 python -m pip install -e ".[dev]"
 python -m pcdm all --scale demo --seed 42
-python -m streamlit run app/Home.py
+python -m streamlit run apps/commercial_insights/Home.py
 ```
 
-Or with GNU Make (Git Bash / Linux / macOS):
+On Unix / Git Bash you can also use `make setup && make all`.
 
-```bash
-make setup
-make all SCALE=demo SEED=42
-make demo
-```
+Warehouse path: `warehouse/pcdm.duckdb`.
 
-No cloud credentials required. DuckDB warehouse lands in `warehouse/pcdm.duckdb`.
+## What this is good for
 
-## What makes this pharma-specific
+- Answering TRx / NRx / share questions nationally and by territory
+- Seeing where specialty patients fall out of the funnel
+- Reconciling retail demand against 867 and SP dispenses
+- Showing IC the difference between as-reported and current alignment
+- Proving MDM quality against known synthetic duplicates / false friends
 
-- **Demand ≠ shipments ≠ specialty dispenses** — reconciled in `mart_channel_reconciliation`
-- **Projected decimals** and **historical restatements** on `rx_demand`
-- **NPI is not a reliable PK** — MDM match-merge + survivorship
-- **Alignment restatement** — IC as-reported vs current structure
-- **Tokenized patients**, `MIN_CELL_SIZE` suppression, data-use classes
+## Important domain notes
 
-## Architecture
+- Demand, shipments, and specialty fills are related but not the same thing
+- Projected demand is decimal on purpose; do not cast TRx to int
+- NBRx needs patient history — we only compute it where specialty data exists
+- NPI is useful but not a safe primary key for HCPs
+- Patient cells under `MIN_CELL_SIZE` are suppressed, not zeroed
 
-See [docs/architecture.md](docs/architecture.md). Medallion layers: `landing → bronze → silver → mdm → gold → semantic`.
+## Docs
 
-## Six analyst questions
+Start with [docs/architecture.md](docs/architecture.md) and
+[docs/runbook.md](docs/runbook.md). Metric definitions live in
+[docs/metrics/metric-definitions.md](docs/metrics/metric-definitions.md).
 
-Answered in the Streamlit demo and [notebooks/demo.ipynb](notebooks/demo.ipynb):
+## License
 
-1. Brand TRx/NRx/share by geo / territory / payer
-2. Growing / declining / switching writers + call activity
-3. Demand vs 867 vs SP + channel inventory
-4. Specialty funnel drop-off
-5. As-reported vs current alignment impact
-6. MDM golden record / survivorship
-
-## Synthetic data only
-
-Generator: `python -m pcdm generate --scale demo|small|large --seed 42`  
-ZIP space is synthetic `9xxxx`. No real IQVIA/NPPES/patient data.
+MIT — intended as a teaching / reference codebase, not a production feed of
+licensed vendor data.
